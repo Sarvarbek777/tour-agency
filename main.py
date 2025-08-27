@@ -1,7 +1,10 @@
 import uvicorn
 from fastapi import FastAPI
+from uvicorn import lifespan
 
-app = FastAPI()
+from routers import router
+
+app = FastAPI(docs_url='/', root_path='/api', title="P30 FastAPI")
 
 
 @app.get("/")
@@ -13,6 +16,7 @@ async def root():
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
 
+app.include_router(router)
 if __name__ == "__main__":
     uvicorn.run(app)
 

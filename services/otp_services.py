@@ -26,14 +26,14 @@ class OtpService:
         self.redis_client.set(_key, code, expire_time)
         return True, 0
 
-    def send_otp_by_email(self, email: str, code: str, expire_time=60) -> tuple[bool, int]:
-        _key = self._get_otp_email_key(email)
+    def send_otp_by_email(self, chat_id: str, code: str, expire_time=60) -> tuple[bool, int]:
+        _key = self._get_otp_email_key(chat_id)
         # _ttl = self.redis_client.ttl(_key)
         # if _ttl > 0:
         #     return False, _ttl
         self.redis_client.set(_key, code, expire_time)
 
-        verification_send_telegram(code)
+        verification_send_telegram(chat_id, code)
         return True, 0
 
     def save_user_before_registration(self, email: str, user_data: dict, expire_time=120):
