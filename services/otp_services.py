@@ -53,3 +53,16 @@ class OtpService:
 
         user_data = orjson.loads(user_data)
         return saved_code == code, user_data
+
+    def verify_code_telegram(self, code: str) -> tuple[bool, dict]:
+        saved_code = self.redis_client.get("otp:telegram:code")
+        user_data = self.redis_client.get("otp:telegram:user")
+
+        if saved_code:
+            saved_code = saved_code.decode()
+
+        if user_data:
+            user_data = orjson.loads(user_data)
+        else:
+            user_data = {}
+

@@ -22,3 +22,17 @@ async def login_view(service: OtpService = Depends(otp_service)):
     return ORJSONResponse(
         {'message': 'Check your email to verify your account'},
     )
+
+@auth_router.get('/verification-code')
+async def login_view(code: str, service: OtpService = Depends(otp_service)):
+    is_verified, user_data = service.verify_code_telegram   (code)
+    if is_verified:
+        # await User.create(**user_data)
+        return ORJSONResponse(
+
+            {'message': 'User successfully registered'}
+        )
+    return ORJSONResponse(
+        {'message': 'Invalid or expired code'},
+        status.HTTP_400_BAD_REQUEST
+    )
